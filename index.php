@@ -53,9 +53,10 @@ $result = array(
 if(!$multi){
     $data = json_decode(requestAPI($amount, $from, $to), true);
     $last_updated_at = $data[$from]['last_updated_at'];
+    $rate = $data[$from][$to];
     $result['date'] = getDateUTC($last_updated_at);
     $result['date_time'] = $last_updated_at;
-    $result['rate'] = $data[$from][$to];
+    $result['rate'] = $rate * $amount;
 
 } else {
     $multi = array();
@@ -65,8 +66,7 @@ if(!$multi){
         $rate = $data[$from][$t];
         $result['date'] = getDateUTC($last_updated_at);
         $result['date_time'] = $last_updated_at;
-
-        $multi[] = array('to' => $t, 'rate' => $rate);
+        $multi[] = array('to' => $t, 'rate' => $rate * $amount);
     }
     $result['multi'] = $multi;
 }
